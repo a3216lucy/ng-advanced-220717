@@ -24,8 +24,6 @@ export class Login2Component implements OnInit, OnDestroy {
       validators: [Validators.required, Validators.email],
       // 變更偵測條件
       updateOn: 'blur',
-      // 設定表單控制項 非空值
-      nonNullable: true,
     }),
     password: this.fb.control('', {
       validators: [
@@ -37,22 +35,19 @@ export class Login2Component implements OnInit, OnDestroy {
     isRememberMe: this.fb.control(true, {}),
     // form array
     profiles: this.fb.array([
-      this.fb.group({
-        city: this.fb.control('Taipei', { validators: [Validators.required] }),
-        tel: this.fb.control('0912-345678', {
-          validators: [Validators.required],
-        }),
-      }),
-      this.fb.group({
-        city: this.fb.control('Taichung', {
-          validators: [Validators.required],
-        }),
-        tel: this.fb.control('0955-123456', {
-          validators: [Validators.required],
-        }),
-      }),
+      this.makeProfile('Taipei', '0912-345678'),
+      this.makeProfile('Taichung', '0955-123456'),
     ]),
   });
+
+  makeProfile(city: string, tel: string) {
+    return this.fb.group({
+      city: this.fb.control(city, { validators: [Validators.required] }),
+      tel: this.fb.control(tel, {
+        validators: [Validators.required],
+      }),
+    });
+  }
 
   constructor(
     private router: Router,
@@ -73,8 +68,13 @@ export class Login2Component implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     document.body.className = this.orig_body_className;
   }
+
   // reset 表單，會把表單狀態(touch、untouched....)全部重置
   resetForm() {
     this.form.reset(this.data);
+  }
+
+  addProfile() {
+    this.form.controls.profiles.push(this.makeProfile('', ''));
   }
 }
