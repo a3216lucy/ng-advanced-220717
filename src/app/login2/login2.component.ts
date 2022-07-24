@@ -1,25 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroupDirective,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forbiddenPassword } from './forbiddenPassword';
 
-/** 自定義驗證器 */
-function forbiddenPassword(control: AbstractControl) {
-  if (!control.value) {
-    return null;
-  }
-  let words = ['will', 'duotify', '123'];
-  var result = words.includes(control.value);
-  if (result) {
-    return { forbiddenPassword: true };
-  } else {
-    return null;
-  }
-}
 @Component({
   templateUrl: './login2.component.html',
   styleUrls: ['./login2.component.css'],
