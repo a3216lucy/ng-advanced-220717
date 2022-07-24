@@ -7,6 +7,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  data: any = {
+    email: '',
+    password: '123',
+    isRememberMe: true,
+  };
+
   origin_body_className = document.body.className;
   form!: FormGroup;
   constructor(private router: Router, private route: ActivatedRoute) {}
