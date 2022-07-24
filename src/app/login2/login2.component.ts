@@ -1,7 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroupDirective,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
+/** 自定義驗證器 */
+function forbiddenPassword(control: AbstractControl) {
+  if (!control.value) {
+    return null;
+  }
+  let words = ['will', 'duotify', '123'];
+  var result = words.includes(control.value);
+  if (result) {
+    return { forbiddenPassword: true };
+  } else {
+    return null;
+  }
+}
 @Component({
   templateUrl: './login2.component.html',
   styleUrls: ['./login2.component.css'],
@@ -12,6 +30,20 @@ export class Login2Component implements OnInit, OnDestroy {
     email: '123@gmail.com',
     password: '123123',
     isRememberMe: true,
+    profiles: [
+      {
+        city: 'Taipei',
+        tel: '0988-888888',
+      },
+      {
+        city: '台中',
+        tel: '0944-444444',
+      },
+      {
+        city: 'Kaohsiung',
+        tel: '0911111111',
+      },
+    ],
   };
 
   orig_body_className = document.body.className;
@@ -30,6 +62,7 @@ export class Login2Component implements OnInit, OnDestroy {
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(32),
+        forbiddenPassword,
       ],
     }),
     isRememberMe: this.fb.control(true, {}),
@@ -60,6 +93,14 @@ export class Login2Component implements OnInit, OnDestroy {
 
     // 模擬 server 2 秒後，把 data 丟進 form
     setTimeout(() => {
+      // 如果動態欄位，不知道資料長度，可以先去判斷 profiles 的長度
+      this.form.controls.profiles.clear();
+      this.data.profiles.forEach((profile) => {
+        this.form.controls.profiles.push(
+          this.makeProfile(profile.city, profile.tel)
+        );
+      });
+
       // this.form.setValue(this.data);
       this.form.patchValue(this.data);
     }, 2000);
@@ -76,5 +117,13 @@ export class Login2Component implements OnInit, OnDestroy {
 
   addProfile() {
     this.form.controls.profiles.push(this.makeProfile('', ''));
+  }
+
+  doLogin(form: FormGroupDirective) {
+    if (form.valid) {
+      localStorage.setItem('apikey', 'TEST');
+      let url = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+      this.router.navigateByUrl(url);
+    }
   }
 }
