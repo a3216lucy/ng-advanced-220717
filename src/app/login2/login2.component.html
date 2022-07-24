@@ -44,13 +44,31 @@ form.errors={{ form.errors | json }}</pre>
                       <label class="custom-control-label" for="customCheck">Remember Me</label>
                     </div>
                   </div>
+
+                  <hr>
+                  <h1>Profiles</h1>
+                  <ng-container formArrayName="profiles">
+
+                    <ng-container *ngFor="let item of form.controls.profiles.controls;let i=index" [formGroupName]="i">
+                      <h3>{{i+1}}</h3>
+                      <div class="form-group">
+                        <input type="text" class="form-control form-control-user" placeholder="請輸入城市"
+                          formControlName="city" />
+                      </div>
+
+                      <div class="form-group">
+                        <input type="text" class="form-control form-control-user" placeholder="請輸入電話"
+                          formControlName="tel" />
+                      </div>
+                    </ng-container>
+                  </ng-container>
                   <a href="index.html" class="btn btn-primary btn-user btn-block">
                     Login
                   </a>
                   <hr />
-                  <a href="index.html" class="btn btn-google btn-user btn-block">
-                    <i class="fab fa-google fa-fw"></i> Login with Google
-                  </a>
+                  <button type="button" (click)="resetForm()" class="btn btn-google btn-user btn-block">
+                    Reset Form
+                  </button>
                   <a href="index.html" class="btn btn-facebook btn-user btn-block">
                     <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                   </a>

@@ -24,6 +24,8 @@ export class Login2Component implements OnInit, OnDestroy {
       validators: [Validators.required, Validators.email],
       // 變更偵測條件
       updateOn: 'blur',
+      // 設定表單控制項 非空值
+      nonNullable: true,
     }),
     password: this.fb.control('', {
       validators: [
@@ -33,6 +35,23 @@ export class Login2Component implements OnInit, OnDestroy {
       ],
     }),
     isRememberMe: this.fb.control(true, {}),
+    // form array
+    profiles: this.fb.array([
+      this.fb.group({
+        city: this.fb.control('Taipei', { validators: [Validators.required] }),
+        tel: this.fb.control('0912-345678', {
+          validators: [Validators.required],
+        }),
+      }),
+      this.fb.group({
+        city: this.fb.control('Taichung', {
+          validators: [Validators.required],
+        }),
+        tel: this.fb.control('0955-123456', {
+          validators: [Validators.required],
+        }),
+      }),
+    ]),
   });
 
   constructor(
@@ -46,11 +65,16 @@ export class Login2Component implements OnInit, OnDestroy {
 
     // 模擬 server 2 秒後，把 data 丟進 form
     setTimeout(() => {
-      this.form.setValue(this.data);
+      // this.form.setValue(this.data);
+      this.form.patchValue(this.data);
     }, 2000);
   }
 
   ngOnDestroy(): void {
     document.body.className = this.orig_body_className;
+  }
+  // reset 表單，會把表單狀態(touch、untouched....)全部重置
+  resetForm() {
+    this.form.reset(this.data);
   }
 }
