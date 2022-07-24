@@ -12,103 +12,94 @@
                 <div class="text-center">
                   <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                 </div>
-                <form class="user">
+                <form class="user" #form="ngForm" (ngSubmit)="doLogin(form)">
                   <div class="form-group">
                     <!-- 使用 Template-Driven Form 範本表單綁定建立 form -->
-                    <input
-                      type="email "
-                      class="form-control form-control-user"
-                      [class.is-invalid]="mEmail.invalid"
-                      [class.is-valid]="mEmail.valid"
-                      id="exampleInputEmail"
-                      aria-describedby="emailHelp"
-                      placeholder="Enter Email Address..."
-                      [(ngModel)]="data.email"
-                      name="email"
-                      #mEmail="ngModel"
-                      required
-                      email
-                    />
-                    <p
-                      class="invalid-feedback"
-                      *ngIf="mEmail.invalid && mEmail.errors?.['required']"
-                    >
+                    <input type="email " class="form-control form-control-user"
+                      [class.is-invalid]="isInvalid(mEmail,form)" [class.is-valid]="isValid(mEmail)"
+                      id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..."
+                      [(ngModel)]="data.email" name="email" #mEmail="ngModel" required minlength="5" email />
+                    <p class="invalid-feedback" *ngIf="isInvalid(mEmail,form) && mEmail.errors?.['required']">
                       請輸入 Email 地址（帳號）
                     </p>
-                    <p
-                      class="invalid-feedback"
-                      *ngIf="mEmail.invalid && mEmail.errors?.['email']"
-                    >
+                    <p class="invalid-feedback" *ngIf="isInvalid(mEmail,form) && mEmail.errors?.['email']">
                       請輸入合法的 Email 地址
                     </p>
                     <pre>
-mEmail.name={{ mEmail.name }}
-mEmail.value={{ mEmail.value }}
-mEmail.valid={{ mEmail.valid }}
-mEmail.invalid={{ mEmail.invalid }}
-mEmail.touched={{ mEmail.touched }}
-mEmail.untouched={{ mEmail.untouched }}
-mEmail.pristine={{ mEmail.pristine }}
-mEmail.dirty={{ mEmail.dirty }}
-mEmail.touched={{ mEmail.touched }}
-mEmail.enabled={{ mEmail.enabled }}
-mEmail.disabled={{ mEmail.disabled }}
-mEmail.errors={{ mEmail.errors | json }}</pre
-                    >
+data={{ data|json }}
+form.name={{ form.name }}
+form.value={{ form.value |json}}
+form.valid={{ form.valid }}
+form.invalid={{ form.invalid }}
+form.touched={{ form.touched }}
+form.untouched={{ form.untouched }}
+form.pristine={{ form.pristine }}
+form.dirty={{ form.dirty }}
+form.touched={{ form.touched }}
+form.enabled={{ form.enabled }}
+form.disabled={{ form.disabled }}
+form.status={{ form.status }}
+form.errors={{ form.errors | json }}</pre>
                   </div>
-                  <div class="form-group">
-                    <input
-                      type="password"
-                      class="form-control form-control-user"
-                      id="exampleInputPassword"
-                      placeholder="Password"
-                      [(ngModel)]="data.password"
-                      name="password"
-                      #mPassword="ngModel"
-                      required
-                    />
+                  <div class="form-group" (dblclick)="disableField(mPassword)">
+                    <!-- 使用 function 方式控制表單驗證器 -->
+                    <input type="password" class="form-control form-control-user"
+                      [class.is-invalid]="isInvalid(mPassword,form)" [class.is-valid]="isValid(mPassword)"
+                      id="exampleInputPassword" placeholder="Password" [(ngModel)]="data.password" name="password"
+                      #mPassword="ngModel" required minlength="6" maxlength="32" />
                   </div>
-                  <div class="form-group">
-                    <div class="custom-control custom-checkbox small">
-                      <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="customCheck"
-                        [(ngModel)]="data.isRememberMe"
-                        name="isRememberMe"
-                        #mIsRememberMe="ngModel"
-                      />
-                      <label class="custom-control-label" for="customCheck"
-                        >Remember Me</label
-                      >
+                  <!-- 巢狀構造的 ngGroup -->
+                  <div ngModelGroup="tab1" #mTab1="ngModelGroup">
+                    <pre>
+    data={{ data|json }}
+    mTab1.name={{ mTab1.name }}
+    mTab1.value={{ mTab1.value |json}}
+    mTab1.valid={{ mTab1.valid }}
+    mTab1.invalid={{ mTab1.invalid }}
+    mTab1.touched={{ mTab1.touched }}
+    mTab1.untouched={{ mTab1.untouched }}
+    mTab1.pristine={{ mTab1.pristine }}
+    mTab1.dirty={{ mTab1.dirty }}
+    mTab1.touched={{ mTab1.touched }}
+    mTab1.enabled={{ mTab1.enabled }}
+    mTab1.disabled={{ mTab1.disabled }}
+    mTab1.status={{ mTab1.status }}
+    mTab1.errors={{ mTab1.errors | json }}</pre>
+
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user"
+                        [class.is-invalid]="isInvalid(mEmail,form)" [class.is-valid]="isValid(mEmail)"
+                        aria-describedby="emailHelp" placeholder="Enter Address..." [(ngModel)]="data.tab1.address"
+                        name="address" #mAddress="ngModel" required />
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control form-control-user"
+                        [class.is-invalid]="isInvalid(mPassword,form)" [class.is-valid]="isValid(mPassword)"
+                        placeholder="zip" [(ngModel)]="data.tab1.zip" name="zip" #mZip="ngModel" required />
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    (click)="doLogin()"
-                    class="btn btn-primary btn-user btn-block"
-                  >
+
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox small">
+                      <input type="checkbox" class="custom-control-input" id="customCheck"
+                        [(ngModel)]="data.isRememberMe" name="isRememberMe" #mIsRememberMe="ngModel" />
+                      <label class="custom-control-label" for="customCheck">Remember Me</label>
+                    </div>
+                  </div>
+                  <button type="submit" [disabled]="form.invalid" class="btn btn-primary btn-user btn-block">
                     Login
                   </button>
                   <hr />
-                  <a
-                    href="index.html"
-                    class="btn btn-google btn-user btn-block"
-                  >
+                  <a href="index.html" class="btn btn-google btn-user btn-block">
                     <i class="fab fa-google fa-fw"></i> Login with Google
                   </a>
-                  <a
-                    href="index.html"
-                    class="btn btn-facebook btn-user btn-block"
-                  >
+                  <a href="index.html" class="btn btn-facebook btn-user btn-block">
                     <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                   </a>
                 </form>
                 <hr />
                 <div class="text-center">
-                  <a class="small" href="forgot-password.html"
-                    >Forgot Password?</a
-                  >
+                  <a class="small" href="forgot-password.html">Forgot Password?</a>
                 </div>
                 <div class="text-center">
                   <a class="small" href="register.html">Create an Account!</a>
