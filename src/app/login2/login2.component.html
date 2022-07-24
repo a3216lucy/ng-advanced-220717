@@ -17,19 +17,21 @@
                     <input type="email" class="form-control form-control-user" id="exampleInputEmail"
                       aria-describedby="emailHelp" placeholder="Enter Email Address..." formControlName="email" />
                     <pre>
+ <!-- 預設的 data -->
 data={{ data|json }}
-form.controls.email.value={{ form.controls.email.value |json}}
-form.controls.email.valid={{ form.controls.email.valid }}
-form.controls.email.invalid={{ form.controls.email.invalid }}
-form.controls.email.touched={{ form.controls.email.touched }}
-form.controls.email.untouched={{ form.controls.email.untouched }}
-form.controls.email.pristine={{ form.controls.email.pristine }}
-form.controls.email.dirty={{ form.controls.email.dirty }}
-form.controls.email.touched={{ form.controls.email.touched }}
-form.controls.email.enabled={{ form.controls.email.enabled }}
-form.controls.email.disabled={{ form.controls.email.disabled }}
-form.controls.email.status={{ form.controls.email.status }}
-form.controls.email.errors={{ form.controls.email.errors | json }}</pre>
+ <!-- 2 秒後更新的 data 值 -->
+form.value={{ form.value |json}}
+form.valid={{ form.valid }}
+form.invalid={{ form.invalid }}
+form.touched={{ form.touched }}
+form.untouched={{ form.untouched }}
+form.pristine={{ form.pristine }}
+form.dirty={{ form.dirty }}
+form.touched={{ form.touched }}
+form.enabled={{ form.enabled }}
+form.disabled={{ form.disabled }}
+form.status={{ form.status }}
+form.errors={{ form.errors | json }}</pre>
                   </div>
                   <div class="form-group">
                     <input type="password" class="form-control form-control-user" id="exampleInputPassword"
